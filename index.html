@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="uz" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevAcademy - IT O'quv Markazi</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-color: #050814;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --primary: #00f0ff; /* Neon Cyan */
+            --secondary: #7000ff; /* Neon Purple */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            
+            /* Gradients */
+            --gradient-text: linear-gradient(90deg, var(--primary), var(--secondary));
+            --gradient-btn: linear-gradient(45deg, #00f0ff, #7000ff);
+            
+            /* Shadows & Glows */
+            --glow-primary: 0 0 20px rgba(0, 240, 255, 0.4);
+            --glow-secondary: 0 0 20px rgba(112, 0, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 800;
+        }
+
+        .highlight {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--gradient-btn);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Scroll Animations Base */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header & Nav */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent;
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background: rgba(5, 8, 20, 0.8);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            text-shadow: var(--glow-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links li a:hover {
+            color: white;
+        }
+
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        /* Abstract Background Elements */
+        .bg-glow-1 {
+            position: absolute;
+            top: 20%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(112,0,255,0.2) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            bottom: 10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,240,255,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-subtitle {
+            color: var(--primary);
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        .hero-stats-mini {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+        }
+
+        .stat-item-mini h4 {
+            font-size: 1.5rem;
+            color: white;
+        }
+        .stat-item-mini p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Courses Section */
+        #courses {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--bg-color) 0%, #0a0f1d 100%);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
+        }
+
+        .course-card:hover::before {
+            opacity: 1;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .course-card:hover .course-icon {
+            background: var(--primary);
+            color: var(--bg-color);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Purple theme for alternating cards */
+        .course-card.purple:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 10px 30px rgba(112, 0, 255, 0.1);
+        }
+        .course-card.purple .course-icon {
+            background: rgba(112, 0, 255, 0.1);
+            color: var(--secondary);
+        }
+        .course-card.purple:hover .course-icon {
+            background: var(--secondary);
+            color: white;
+            box-shadow: var(--glow-secondary);
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .course-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .course-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s;
+        }
+
+        .course-card:hover .course-link {
+            gap: 10px;
+            color: var(--primary);
+        }
+        .course-card.purple:hover .course-link {
+            color: var(--secondary);
+        }
+
+        /* Stats Section */
+        #about {
+            padding: 80px 0;
+            background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-box {
+            padding: 30px;
+            background: var(--surface-color);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-number span {
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .contact-wrapper {
+            display: flex;
+            gap: 50px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .contact-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #02040a;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s, transform 0.3s;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title { font-size: 3.5rem; }
+            .stats-container { grid-template-columns: repeat(2, 1fr); }
+            .contact-wrapper { flex-direction: column; padding: 30px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--bg-color);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: left 0.3s ease;
+            }
+            .nav-links.active { left: 0; }
+            .mobile-menu-btn { display: block; }
+            
+            .hero-title { font-size: 2.5rem; }
+            .hero-stats-mini { flex-direction: column; gap: 20px; }
+            
+            .stats-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-code"></i> Dev<span class="highlight">Academy</span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home">Asosiy</a></li>
+                <li><a href="#courses">Kurslar</a></li>
+                <li><a href="#about">Biz haqimizda</a></li>
+                <li><a href="#contact">Ro'yxatdan o'tish</a></li>
+            </ul>
+            <div class="mobile-menu-btn" id="menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="bg-glow-1"></div>
+            <div class="bg-glow-2"></div>
+            <div class="container">
+                <div class="hero-content reveal">
+                    <span class="hero-subtitle">IT sohasiga qadam qo'ying</span>
+                    <h1 class="hero-title">Kelajak kasbini <br> <span class="highlight">biz bilan</span> o'rganing</h1>
+                    <p class="hero-desc">Dasturlash, dizayn va zamonaviy kasblarni amaliyotchi mutaxassislardan o'rganing. Real loyihalar ustida ishlab, portfolio yarating.</p>
+                    <a href="#contact" class="btn">Kursga yozilish</a>
+                    
+                    <div class="hero-stats-mini">
+                        <div class="stat-item-mini">
+                            <h4>100%</h4>
+                            <p>Amaliyotga asoslangan</p>
+                        </div>
+                        <div class="stat-item-mini">
+                            <h4>6+ Oy</h4>
+                            <p>Intensiv ta'lim</p>
+                        </div>
+                        <div class="stat-item-mini">
+                            <h4>Ish topish</h4>
+                            <p>Karyera markazi yordami</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="courses">
+            <div class="container">
+                <h2 class="section-title reveal">Bizning <span class="highlight">Kurslarimiz</span></h2>
+                
+                <div class="courses-grid">
+                    <!-- Course 1 -->
+                    <div class="course-card reveal">
+                        <div class="course-icon">
+                            <i class="fa-brands fa-react"></i>
+                        </div>
+                        <h3 class="course-title">Frontend Dasturlash</h3>
+                        <p class="course-desc">HTML, CSS, JavaScript va React.js yordamida zamonaviy va interaktiv veb-saytlar yaratishni o'rganing.</p>
+                        <a href="#contact" class="course-link">Batafsil <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Course 2 -->
+                    <div class="course-card purple reveal">
+                        <div class="course-icon">
+                            <i class="fa-brands fa-node-js"></i>
+                        </div>
+                        <h3 class="course-title">Backend Dasturlash</h3>
+                        <p class="course-desc">Node.js, Express va ma'lumotlar bazalari (PostgreSQL, MongoDB) bilan kuchli server mantiqini yozing.</p>
+                        <a href="#contact" class="course-link">Batafsil <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Course 3 -->
+                    <div class="course-card reveal">
+                        <div class="course-icon">
+                            <i class="fa-brands fa-python"></i>
+                        </div>
+                        <h3 class="course-title">Python & Sun'iy Intelekt</h3>
+                        <p class="course-desc">Python dasturlash tili, Data Science asoslari va Telegram botlar yaratish sirlari.</p>
+                        <a href="#contact" class="course-link">Batafsil <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Course 4 -->
+                    <div class="course-card purple reveal">
+                        <div class="course-icon">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </div>
+                        <h3 class="course-title">Grafik & UI/UX Dizayn</h3>
+                        <p class="course-desc">Figma, Adobe Photoshop va Illustrator dasturlarida kreativ dizaynlar va interfeyslar yaratish.</p>
+                        <a href="#contact" class="course-link">Batafsil <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2 class="section-title reveal">Raqamlar <span class="highlight">So'zlaganda</span></h2>
+                <div class="stats-container">
+                    <div class="stat-box reveal">
+                        <div class="stat-number"><span class="counter" data-target="1500">0</span>+</div>
+                        <div class="stat-label">Bitiruvchilar</div>
+                    </div>
+                    <div class="stat-box reveal">
+                        <div class="stat-number"><span class="counter" data-target="50">0</span>+</div>
+                        <div class="stat-label">Malakali Mentorlar</div>
+                    </div>
+                    <div class="stat-box reveal">
+                        <div class="stat-number"><span class="counter" data-target="15">0</span></div>
+                        <div class="stat-label">O'quv Dasturlari</div>
+                    </div>
+                    <div class="stat-box reveal">
+                        <div class="stat-number"><span class="counter" data-target="95">0</span>%</div>
+                        <div class="stat-label">Ish bilan ta'minlangan</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="bg-glow-1" style="top: auto; bottom: 0; left: auto; right: 0;"></div>
+            <div class="container">
+                <div class="contact-wrapper reveal">
+                    <div class="contact-info">
+                        <h3>O'z joyingizni <span class="highlight">band qiling!</span></h3>
+                        <p>Hoziroq ro'yxatdan o'ting va menejerlarimiz siz bilan tez orada bog'lanib, barcha savollaringizga javob berishadi.</p>
+                        
+                        <div style="margin-top: 30px;">
+                            <p><i class="fa-solid fa-phone" style="color: var(--primary); margin-right: 10px;"></i> +998 90 123 45 67</p>
+                            <p><i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 10px;"></i> Toshkent sh., Chilonzor tumani</p>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form" onsubmit="event.preventDefault(); showMessage();">
+                        <div class="input-group">
+                            <input type="text" placeholder="Ismingiz" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="tel" placeholder="Telefon raqamingiz (+998...)" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" placeholder="Qaysi kursga qiziqdingiz?">
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%; text-align: center;">Yuborish</button>
+                        <p id="success-msg" style="color: var(--primary); display: none; text-align: center; margin-top: 10px;">Arizangiz qabul qilindi!</p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="logo" style="justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-code"></i> Dev<span class="highlight">Academy</span>
+            </a>
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <p>&copy; 2026 DevAcademy. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sticky Header
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if(navLinks.classList.contains('active')){
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-links li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.querySelector('i').classList.remove('fa-xmark');
+                menuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // Scroll Reveal Animations using Intersection Observer
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Stop observing once animated
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Animated Counters
+        const counters = document.querySelectorAll('.counter');
+        let animated = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !animated) {
+                animated = true;
+                counters.forEach(counter => {
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        
+                        // Lower inc means slower animation
+                        const inc = target / 50; 
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 30);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                });
+            }
+        }, { threshold: 0.5 });
+
+        // Observe the stats section
+        const statsSection = document.querySelector('.stats-container');
+        if(statsSection) {
+            counterObserver.observe(statsSection);
+        }
+
+        // Form Submission Simulation
+        function showMessage() {
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+                document.querySelector('.contact-form').reset();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
